@@ -13,24 +13,26 @@
 
 - In hosts file make a new row with this line  <b>127.0.0.5 marines.test</b>
 - In httpd-vhosts add this tag <b>
-                              <VirtualHost 127.0.0.5:80>
-                               DocumentRoot "path\to\app\marine\apiApp\public"
-                               DirectoryIndex index.php
-                               ServerName  marines.test
-                               <Directory  "path\to\app\marine\apiApp\public">
-                               Options Indexes FollowSymLinks MultiViews
-                               AllowOverride all
-                               Order Deny,Allow
-                               Allow from all
-                               Require all granted
-                               </Directory>
-                               </VirtualHost> </b>
+-                              <VirtualHost 127.0.0.5:80>
+-                              DocumentRoot "path\to\app\marine\apiApp\public"
+-                               DirectoryIndex index.php
+-                              ServerName  marines.test
+-                              <Directory  "path\to\app\marine\apiApp\public">
+-                               Options Indexes FollowSymLinks MultiViews
+-                              AllowOverride all
+-                               Order Deny,Allow
+-                               Allow from all
+-                              Require all granted
+-                              </Directory>
+-                              </VirtualHost> 
+</b>
 - Restart apache.                               
 - I wanted to use docker but my version in the container is PHP 7.3 and i have to build another container.
 
-## Env init
+## Env init and composer install
 - Firstly create an .env file in the apiApp folder with the example given into the .env.example.sts
 - Create the corresponding database from your .env file.
+- Run in the apiApp directory the command <b> composer install </b>.
 
 ## Database
 
@@ -39,9 +41,8 @@ skip this section.
 
 ## Steps to migrate
 
-- Run in the apiApp directory the command <b> composer install </b>.
-- Then run in the apiApp directory the command <b> php artisan migrate </b>.
-- Run the command php artisan passport:install
+- Run in the apiApp directory the command <b> php artisan migrate </b>.
+- Run the command <b> php artisan passport:install</b>.
 - In your database run all queries one by one contained in the database/x.x.x.sql file.
 - The csv file required is located in storage/app/public/assignment_dataset.csv
 
@@ -112,10 +113,11 @@ Eg : Authorization <b>Bearer accessToken</b>.
  - There are two composers created to render results. The VesselComposer is a little bit different from the VesselComposer_v2.
  - The first one will give as a result the position from vessel and the coordinates will be rendered as text under the key position, but it skips one loop which can be very expensive if results are more.
  - The VesselComposer_v2 also has a cache process. If you request same query for 60 minutes the cache will output the result.
+ - Cache will also holds the pagination of request. If you want to clear cache run in the apiApp directory <b> php artisan cache:clear </b>.
  - The second one will make the loop and create a position key and under there will place the coordinates lat and lon.
  - You can choose which composer will run from the turn_on key into the apiApp/config/tracker/vessels/composers.php
  - As mentioned before in the Accept key you can insert application\json or application\xml and the result will be rendered in the corresponding key.
-
+ 
 ##### PhotoIncluded
 
 - There is a photo include in the app/storage/app/public from postman.

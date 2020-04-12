@@ -26,7 +26,6 @@ class Mmsi extends Filter
                 $builder->orWhere(self::WHERE_KEY, $value);
             }
         });
-
         return $builder->orderBy(parent::ORDER_KEY);
     }
 }

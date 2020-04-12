@@ -19,12 +19,14 @@ class Mmsi extends Filter
         if (!is_array(request(self::WHERE_KEY)))
             return $builder->where(self::WHERE_KEY, request(self::WHERE_KEY))->orderBy(parent::ORDER_KEY);
         $values = explode($this->separator, request(self::WHERE_KEY)[self::POSITION_START]);
-        static $first = false;
 
-        foreach ($values as $key => $value) {
-            $builder->orwhere(self::WHERE_KEY, $value);
 
-        }
+        $builder->orWhere(function ($builder) use ($values) {
+            foreach ($values as $key => $value) {
+                $builder->orWhere(self::WHERE_KEY, $value);
+            }
+        });
+
         return $builder->orderBy(parent::ORDER_KEY);
     }
 }
